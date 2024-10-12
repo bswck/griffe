@@ -23,6 +23,7 @@ _commands = []
 # Helper functions ------------------------------------------------------------
 # -----------------------------------------------------------------------------
 def _shell(cmd: str, *, capture_output: bool = False, **kwargs: Any) -> str | None:
+    print(cmd, flush=True)
     if capture_output:
         return subprocess.check_output(cmd, shell=True, text=True, **kwargs)  # noqa: S602
     subprocess.run(cmd, shell=True, check=True, stderr=subprocess.STDOUT, **kwargs)  # noqa: S602
@@ -43,7 +44,7 @@ def _environ(**kwargs: str) -> Iterator[None]:
 def _uv_install(venv: Path) -> None:
     with _environ(UV_PROJECT_ENVIRONMENT=str(venv), PYO3_USE_ABI3_FORWARD_COMPATIBILITY="1"):
         if "CI" in os.environ:
-            _shell("uv sync --no-editable")
+            _shell("uv sync --no-editable --verbose")
         else:
             _shell("uv sync")
 
